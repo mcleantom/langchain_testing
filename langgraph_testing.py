@@ -76,33 +76,33 @@ graph_builder.set_entry_point("chatbot")
 graph = graph_builder.compile(checkpointer=memory)
 
 
-user_input = (
-    "Can you look up when LangGraph was released? "
-    "When you have the answer, use the human_assistance tool for review."
-)
-config = {"configurable": {"thread_id": "1"}}
-events = graph.stream(
-    {"messages": [{"role": "user", "content": user_input}]},
-    config,
-    stream_mode="values"
-)
-for event in events:
-    if "messages" in event:
-        event["messages"][-1].pretty_print()
+# user_input = (
+#     "Can you look up when LangGraph was released? "
+#     "When you have the answer, use the human_assistance tool for review."
+# )
+# config = {"configurable": {"thread_id": "1"}}
+# events = graph.stream(
+#     {"messages": [{"role": "user", "content": user_input}]},
+#     config,
+#     stream_mode="values"
+# )
+# for event in events:
+#     if "messages" in event:
+#         event["messages"][-1].pretty_print()
 
-human_command = Command(
-    resume={
-        "name": "LangGraph",
-        "birthday": "Jan 17, 2024"
-    },
-)
-events = graph.stream(human_command, config, stream_mode="values")
-for event in events:
-    if "messages" in event:
-        event["messages"][-1].pretty_print()
+# human_command = Command(
+#     resume={
+#         "name": "LangGraph",
+#         "birthday": "Jan 17, 2024"
+#     },
+# )
+# events = graph.stream(human_command, config, stream_mode="values")
+# for event in events:
+#     if "messages" in event:
+#         event["messages"][-1].pretty_print()
 
-snapshot = graph.get_state(config)
-print({k: v for k, v in snapshot.values.items() if k in ("name", "birthday")})
+# snapshot = graph.get_state(config)
+# print({k: v for k, v in snapshot.values.items() if k in ("name", "birthday")})
 
 
 # user_input = "I need some expert guidance for building an AI agent. Could you request assistance for me?"
@@ -125,17 +125,17 @@ print({k: v for k, v in snapshot.values.items() if k in ("name", "birthday")})
 # for event in events:
 #     if "messages" in event:
 #         event["messages"][-1].pretty_print()
-#
-#
-# def stream_graph_updates(user_input: str):
-#     for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
-#         for value in event.values():
-#             print("Assistant: ", value["messages"][-1].content)
-#
-#
-# while True:
-#     user_input = input("User: ")
-#     if user_input.lower() in ["quit", "exit", "q"]:
-#         print("Goodbye!")
-#         break
-#     stream_graph_updates(user_input)
+
+
+def stream_graph_updates(user_input: str):
+    for event in graph.stream({"messages": [{"role": "user", "content": user_input}]}):
+        for value in event.values():
+            print("Assistant: ", value["messages"][-1].content)
+
+
+while True:
+    user_input = input("User: ")
+    if user_input.lower() in ["quit", "exit", "q"]:
+        print("Goodbye!")
+        break
+    stream_graph_updates(user_input)

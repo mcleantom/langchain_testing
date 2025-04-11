@@ -70,6 +70,7 @@ research_agent = create_react_agent(
     llm, tools=[tavily_tool], prompt="You are a researcher. DO NOT do any math."
 )
 
+
 def research_node(state: State) -> Command[Literal["supervisor"]]:
     result = research_agent.invoke(state)
     return Command(
